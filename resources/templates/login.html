@@ -1,0 +1,23 @@
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="text-danger font-weight-bold">
+            {% for error in errors %}
+            <li>{{error}}</li>
+            {% endfor %}
+        </div>
+        <form method="POST" action="/login/">
+            <label>
+                <input type="text" name="login" value="" placeholder="Login"/>
+            </label>
+            <label>
+                <input type="text" name="password" value="" placeholder="Password" datatype="password"/>
+            </label>
+            <input type="submit" value="Login">
+        </form>
+        <form method="get" action="/register/">
+            <input type="submit" value="Sign Up">
+        </form>
+    </div>
+</div>
+{% endblock %}

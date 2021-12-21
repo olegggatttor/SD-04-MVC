@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Boards</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" type="text/css"/>
+</head>
+<body class="gradient">
+<div class="input">
+    <form method="post" action="/add_board">
+        <label>
+            <input type="text" name="board_name" value="" placeholder="Board name"/>
+        </label>
+        <input type="submit" value="Добавить доску">
+    </form>
+    <form method="get" action="/pipelines">
+        <input type="submit" value="Управление пайплайнами">
+    </form>
+    <form method="get" action="/tags">
+        <input type="submit" value="Управление тэгами">
+    </form>
+</div>
+{% for board in boards %}
+<table style="float: left">
+    <tr>
+        <th>
+            <form method="get" action="/tasks_lists/{{ board.id }}">
+                <input type="submit" value="{{ board.board_name }}">
+            </form>
+            <form method="post" action="/delete_board/{{ board.id }}">
+                <input type="submit" value="❌">
+            </form>
+            <form method="post" action="/change_board_owner/{{ board.id }}">
+                <label>
+                    <input type="text" name="new_owner" value="" placeholder="New owner login"/>
+                </label>
+                <input type="submit" value="Switch owner">
+            </form>
+        </th>
+    </tr>
+</table>
+{% endfor %}
+</body>
+</html>

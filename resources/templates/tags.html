@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Boards</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" type="text/css"/>
+</head>
+<body class="gradient">
+<div class="input">
+    <form method="post" action="/add_tag">
+        <label>
+            <input type="text" name="tag_name" value="" placeholder="Tag name"/>
+        </label>
+        <input type="submit" value="Создать тэг">
+    </form>
+</div>
+{% for tag in tags %}
+<table style="float: left">
+    <tr>
+        <th>
+            <form method="post" action="/delete_tag/{{ tag.id }}">
+                <input type="submit" value="{{ tag.tag_name }}">
+            </form>
+        </th>
+    </tr>
+</table>
+{% endfor %}
+</body>
+</html>

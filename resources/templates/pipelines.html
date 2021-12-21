@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Pipelines</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" type="text/css"/>
+</head>
+<body class="gradient">
+<div class="input">
+    <form method="post" action="/add_pipeline">
+        <label>
+            <input type="text" name="pipeline_name" value="" placeholder="Pipeline name"/>
+        </label>
+        <input type="submit" value="Add pipeline">
+    </form>
+</div>
+{% for pipeline in pipelines %}
+<table style="float: bottom">
+    <tr>
+        <th>
+            <form method="post" action="/delete_pipeline/{{ pipeline.id }}">
+                <input type="submit" value="❌">
+            </form>
+        </th>
+        <th>{{ pipeline.pipeline_name }}</th>
+        {% for status in pipeline.pipeline %}
+        <th>
+            <form method="post" action="/delete_cell/{{ pipeline.id }}/{{ loop.index0 }}">
+                <input type="submit" value="{{ status }}">
+            </form>
+        </th>
+        <th>
+            🡢
+        </th>
+        {% endfor %}
+        <th>
+            <form method="post" action="/add_cell/{{ pipeline.id }}">
+                <label>
+                    <input type="text" name="cell_name" value="" placeholder="New cell name"/>
+                </label>
+                <input type="submit" value="+">
+            </form>
+        </th>
+    </tr>
+</table>
+{% endfor %}
+</body>
+</html>

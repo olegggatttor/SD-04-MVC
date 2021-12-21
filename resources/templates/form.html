@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Task manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" type="text/css"/>
+</head>
+<body class="gradient">
+<div class="input">
+    <form method="post" action="/add_task_list/{{ board_id }}">
+        <label>
+            <input type="text" name="task_list_name" value="" placeholder="List name"/>
+        </label>
+        <input type="submit" value="Добавить список">
+    </form>
+</div>
+{% for group, tasks in groups.items() %}
+<table style="float: left">
+    <tr>
+        <th>{{ group.task_list_name }}</th>
+    </tr>
+    <tr>
+        <th>
+            <form method="post" action="/delete_task_list/{{ board_id }}/{{ group.id }}">
+                <input type="submit" value="❌">
+            </form>
+        </th>
+    </tr>
+    {% for task in tasks %}
+    <tr>
+        <td>
+            <div class="card">
+                <div class="card-body"
+                     style="position: relative; background-color: {{ 'green' if task.is_done else 'white' }}">
+                    <h5 class="card-title">{{ task.task_name }}</h5>
+                    <p class="card-text">{{ task.task_desc }}</p>
+                    <form method="post"
+                          action="/change_status/{{ board_id }}/{{ group.id }}/{{ task.id }}">
+                        <input type="submit" value="{{ pipelines[task.pipeline_id].pipeline[task.cur_pipeline_index] }}">
+                    </form>
+                    "----TAGS----"
+                    {% for tag_id in task.tags %}
+                    <form method="post" action="/remove_tag/{{ board_id }}/{{ group.id }}/{{ task.id }}/{{ tag_id }}">
+                        <input type="submit"
+                               value="{{ all_tags[tag_id].tag_name }}">
+                    </form>
+                    {% endfor %}
+                    <form method="post" action="/add_tag/{{ board_id }}/{{ group.id }}/{{ task.id }}">
+                        <label>
+                            <input list="tag_id" name="tag_id">
+                            <datalist id="tag_id">
+                                {% for tag in all_tags.values() %}
+                                <option value="{{ tag.id }}">{{ tag.tag_name }}</option>
+                                {% endfor %}
+                            </datalist>
+                        </label>
+                        <input type="submit"
+                               value="Add tag"
+                               style="position: absolute; bottom: 0; right: 0; margin-bottom: 10px; margin-right: 10px;">
+                    </form>
+                    <form method="post" action="/delete_task/{{ board_id }}/{{ group.id }}/{{ task.id }}">
+                        <input type="submit"
+                               value="❌"
+                               style="position: absolute; top: 0; right: 0; margin-top: 10px; margin-right: 10px;">
+                    </form>
+                </div>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td>
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="/add_task/{{ board_id }}/{{ group.id }}">
+                        <label>
+                            <input type="text" name="name" value="" placeholder="Task name"/>
+                        </label>
+                        <label>
+                            <input type="text" name="desc" value="" placeholder="Task description"/>
+                        </label>
+                        <label>
+                            <input list="pipeline_id" name="pipeline_id">
+                            <datalist id="pipeline_id">
+                                {% for pipeline in pipelines.values() %}
+                                <option value="{{ pipeline.id }}">{{ pipeline.pipeline_name }}</option>
+                                {% endfor %}
+                            </datalist>
+                        </label>
+                        <input type="submit" value="Add task to list">
+                    </form>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+{% endfor %}
+</body>
+</html>
